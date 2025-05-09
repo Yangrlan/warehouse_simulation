@@ -12,7 +12,12 @@ In addition to ROS1 Noetic and Gazebo Classic installations, the dependencies ca
 # From the root directory of the workspace. This will install everything mentioned in package.xml
 rosdep install --from-paths src --ignore-src -r -y
 ```
-
+Then clone and install the livox-related packages:
+```bash
+git clone https://github.com/Livox-SDK/Livox-SDK.git
+git clone https://github.com/Livox-SDK/livox_laser_simulation.git
+git clone https://github.com/Livox-SDK/livox_ros_driver.git
+```
 ### Source Build
 
 Download the codes into a ROS workspace, then
@@ -49,6 +54,3 @@ roslaunch bcr_bot gazebo.launch
 
 ### Acknowledgements
 - https://github.com/blackcoffeerobotics/bcr_bot.git
-- https://github.com/Livox-SDK/Livox-SDK.git
-- https://github.com/Livox-SDK/livox_laser_simulation.git
-- https://github.com/Livox-SDK/livox_ros_driver.git
