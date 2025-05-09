@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bcr_bot">
+
+    <gazebo>
+        <static>false</static>
+    </gazebo>
+
+    <!-- .....................MULTI WHEEL DIFF DRIVE ................................... -->
+
+    <gazebo>
+        <plugin name="diffdrive_plugin_multiwheel_middle" filename="libgazebo_ros_diff_drive.so">
+            <robotNamespace>$(arg robot_namespace)</robotNamespace>
+            <legacyMode>false</legacyMode>
+            <updateRate>50.0</updateRate>
+            <leftJoint>middle_left_wheel_joint</leftJoint>
+            <rightJoint>middle_right_wheel_joint</rightJoint>
+            <wheelSeparation>${traction_track_width+traction_wheel_width-0.01}</wheelSeparation>
+            <wheelDiameter>${2*traction_wheel_radius+0.01}</wheelDiameter>
+            <robotBaseFrame>base_footprint</robotBaseFrame>
+            <wheelTorque>${traction_max_wheel_torque}</wheelTorque>
+            <commandTopic>cmd_vel</commandTopic>
+            <odometryTopic>$(arg wheel_odom_topic)</odometryTopic>
+            <odometryFrame>odom</odometryFrame>
+            <rosDebugLevel>na</rosDebugLevel>
+            <publishOdomTF>$(arg publish_wheel_odom_tf)</publishOdomTF>
+            <publishWheelTF>false</publishWheelTF>
+            <publishWheelJointState>true</publishWheelJointState>
+            <publishOdometryMsg>true</publishOdometryMsg>
+            <odometrySource>$(arg odometry_source)</odometrySource>
+            <wheelAcceleration>5.0</wheelAcceleration>
+        </plugin>
+    </gazebo>
+
+    <!--............................... IMU PLUGIN ..................................... -->
+
+    <gazebo reference="imu_frame">
+        <sensor name="my_imu" type="imu">
+            <always_on>true</always_on>
+            <plugin name="my_imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+                <topicName>$(arg robot_namespace)/imu</topicName>
+                <updateRateHZ>100</updateRateHZ>
+                <frameName>imu_frame</frameName>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+    <!--............................... Ground truth PLUGIN .............................-->
+
+    <gazebo>
+        <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+            <robotNamespace>$(arg robot_namespace)</robotNamespace>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>30.0</updateRate>
+            <bodyName>base_footprint</bodyName>
+            <topicName>ground_truth_pose</topicName>
+            <gaussianNoise>0.00</gaussianNoise>
+            <frameName>$(arg ground_truth_frame)</frameName>
+        </plugin>
+    </gazebo>
+
+    <!-- ........................... CAMERA PLUGIN ................................... -->
+
+    <xacro:if value="$(arg camera_enabled)">
+
+        <gazebo reference="fisheye_camera">
+            <sensor type="camera" name="fisheye_camera">
+                <always_on>true</always_on>
+                <update_rate>30.0</update_rate>
+                <visualize>1</visualize>
+                <camera>
+                    <horizontal_fov>${radians(camera_horizontal_fov)}</horizontal_fov>
+                    <image>
+                        <format>R8G8B8</format>
+                        <width>848</width>
+                        <height>800</height>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>10.0</far>
+                    </clip>
+                    <noise>
+		      <type>gaussian</type>
+		      <mean>0.0</mean>
+		      <stddev>0.001</stddev>
+		    </noise>
+		    <lens>
+		      <type>custom</type>
+		      <custom_function>
+		        <c1>1.05</c1>
+		        <c2>4</c2>
+		        <f>1</f>
+		        <fun>tan</fun>
+		      </custom_function>
+		      <scale_to_hfov>1</scale_to_hfov>
+		      <cutoff_angle>3.1415</cutoff_angle>
+		    </lens>
+                </camera>
+                <plugin name="fisheye_camera_controller" filename="libgazebo_ros_camera.so">
+                    <cameraName>fisheye_camera</cameraName>
+                    <alwaysOn>true</alwaysOn>
+                    <updateRateHZ>30.0</updateRateHZ>
+                    <imageTopicName>image_raw</imageTopicName>
+                    <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                    <frameName>fisheye_camera_optical</frameName>
+                    <CxPrime>640</CxPrime>
+                    <Cx>640</Cx>
+                    <Cy>360</Cy>
+                    <hackBaseline>0</hackBaseline>
+                    <focalLength>369.502083</focalLength>
+                    <distortion_k1>0.0</distortion_k1>
+                    <distortion_k2>0.0</distortion_k2>
+                    <distortion_k3>0.0</distortion_k3>
+                    <distortion_t1>0.0</distortion_t1>
+                    <distortion_t2>0.0</distortion_t2>
+                    <robotNamespace>$(arg robot_namespace)</robotNamespace>
+                </plugin>
+            </sensor>
+        </gazebo>
+
+    </xacro:if>
+
+    <xacro:if value="$(arg camera_enabled)">
+
+        <gazebo reference="fisheye_camera2">
+            <sensor type="camera" name="fisheye_camera2">
+                <always_on>true</always_on>
+                <update_rate>30.0</update_rate>
+                <visualize>1</visualize>
+                <camera>
+                    <horizontal_fov>${radians(camera_horizontal_fov)}</horizontal_fov>
+                    <image>
+                        <format>R8G8B8</format>
+                        <width>848</width>
+                        <height>800</height>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>10.0</far>
+                    </clip>
+                    <noise>
+		      <type>gaussian</type>
+		      <mean>0.0</mean>
+		      <stddev>0.001</stddev>
+		    </noise>
+		    <lens>
+		      <type>custom</type>
+		      <custom_function>
+		        <c1>1.05</c1>
+		        <c2>4</c2>
+		        <f>1</f>
+		        <fun>tan</fun>
+		      </custom_function>
+		      <scale_to_hfov>1</scale_to_hfov>
+		      <cutoff_angle>3.1415</cutoff_angle>
+		    </lens>
+                </camera>
+                <plugin name="fisheye_camera_controller2" filename="libgazebo_ros_camera.so">
+                    <cameraName>fisheye_camera2</cameraName>
+                    <alwaysOn>true</alwaysOn>
+                    <updateRateHZ>30.0</updateRateHZ>
+                    <imageTopicName>image_raw</imageTopicName>
+                    <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                    <frameName>fisheye_camera_optical2</frameName>
+                    <CxPrime>640</CxPrime>
+                    <Cx>640</Cx>
+                    <Cy>360</Cy>
+                    <hackBaseline>0</hackBaseline>
+                    <focalLength>369.502083</focalLength>
+                    <distortion_k1>0.0</distortion_k1>
+                    <distortion_k2>0.0</distortion_k2>
+                    <distortion_k3>0.0</distortion_k3>
+                    <distortion_t1>0.0</distortion_t1>
+                    <distortion_t2>0.0</distortion_t2>
+                    <robotNamespace>$(arg robot_namespace)</robotNamespace>
+                </plugin>
+            </sensor>
+        </gazebo>
+
+    </xacro:if>
+    
+    <xacro:if value="$(arg camera_enabled)">
+
+        <gazebo reference="fisheye_camera3">
+            <sensor type="camera" name="fisheye_camera3">
+                <always_on>true</always_on>
+                <update_rate>30.0</update_rate>
+                <visualize>1</visualize>
+                <camera>
+                    <horizontal_fov>${radians(camera_horizontal_fov)}</horizontal_fov>
+                    <image>
+                        <format>R8G8B8</format>
+                        <width>848</width>
+                        <height>800</height>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>10.0</far>
+                    </clip>
+                    <noise>
+		      <type>gaussian</type>
+		      <mean>0.0</mean>
+		      <stddev>0.001</stddev>
+		    </noise>
+		    <lens>
+		      <type>custom</type>
+		      <custom_function>
+		        <c1>1.05</c1>
+		        <c2>4</c2>
+		        <f>1</f>
+		        <fun>tan</fun>
+		      </custom_function>
+		      <scale_to_hfov>1</scale_to_hfov>
+		      <cutoff_angle>3.1415</cutoff_angle>
+		    </lens>
+                </camera>
+                <plugin name="fisheye_camera_controller3" filename="libgazebo_ros_camera.so">
+                    <cameraName>fisheye_camera3</cameraName>
+                    <alwaysOn>true</alwaysOn>
+                    <updateRateHZ>30.0</updateRateHZ>
+                    <imageTopicName>image_raw</imageTopicName>
+                    <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                    <frameName>fisheye_camera_optical3</frameName>
+                    <CxPrime>640</CxPrime>
+                    <Cx>640</Cx>
+                    <Cy>360</Cy>
+                    <hackBaseline>0</hackBaseline>
+                    <focalLength>369.502083</focalLength>
+                    <distortion_k1>0.0</distortion_k1>
+                    <distortion_k2>0.0</distortion_k2>
+                    <distortion_k3>0.0</distortion_k3>
+                    <distortion_t1>0.0</distortion_t1>
+                    <distortion_t2>0.0</distortion_t2>
+                    <robotNamespace>$(arg robot_namespace)</robotNamespace>
+                </plugin>
+            </sensor>
+        </gazebo>
+
+    </xacro:if>
+    
+    <xacro:if value="$(arg camera_enabled)">
+
+        <gazebo reference="fisheye_camera4">
+            <sensor type="camera" name="fisheye_camera4">
+                <always_on>true</always_on>
+                <update_rate>30.0</update_rate>
+                <visualize>1</visualize>
+                <camera>
+                    <horizontal_fov>${radians(camera_horizontal_fov)}</horizontal_fov>
+                    <image>
+                        <format>R8G8B8</format>
+                        <width>848</width>
+                        <height>800</height>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>10.0</far>
+                    </clip>
+                    <noise>
+		      <type>gaussian</type>
+		      <mean>0.0</mean>
+		      <stddev>0.001</stddev>
+		    </noise>
+		    <lens>
+		      <type>custom</type>
+		      <custom_function>
+		        <c1>1.05</c1>
+		        <c2>4</c2>
+		        <f>1</f>
+		        <fun>tan</fun>
+		      </custom_function>
+		      <scale_to_hfov>1</scale_to_hfov>
+		      <cutoff_angle>3.1415</cutoff_angle>
+		    </lens>
+                </camera>
+                <plugin name="fisheye_camera_controller4" filename="libgazebo_ros_camera.so">
+                    <cameraName>fisheye_camera4</cameraName>
+                    <alwaysOn>true</alwaysOn>
+                    <updateRateHZ>30.0</updateRateHZ>
+                    <imageTopicName>image_raw</imageTopicName>
+                    <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                    <frameName>fisheye_camera_optical4</frameName>
+                    <CxPrime>640</CxPrime>
+                    <Cx>640</Cx>
+                    <Cy>360</Cy>
+                    <hackBaseline>0</hackBaseline>
+                    <focalLength>369.502083</focalLength>
+                    <distortion_k1>0.0</distortion_k1>
+                    <distortion_k2>0.0</distortion_k2>
+                    <distortion_k3>0.0</distortion_k3>
+                    <distortion_t1>0.0</distortion_t1>
+                    <distortion_t2>0.0</distortion_t2>
+                    <robotNamespace>$(arg robot_namespace)</robotNamespace>
+                </plugin>
+            </sensor>
+        </gazebo>
+
+    </xacro:if>
+    
+    <xacro:if value="$(arg camera_enabled)">
+    
+        <gazebo reference="laser_livox">
+            <sensor type="ray" name="laser_livox">
+                <pose>0 0 0 0 0 0</pose>
+                <visualize>true</visualize>
+                <update_rate>10.0</update_rate>
+                <plugin name="gazebo_ros_laser_controller" filename="liblivox_laser_simulation.so">
+                    <ray>
+                      <scan>
+                        <horizontal>
+                        <samples>100</samples>
+                        <resolution>1</resolution>
+                        <min_angle>${-horizontal_fov/360*3.14159}</min_angle>
+                        <max_angle>${horizontal_fov/360*3.14159}</max_angle>
+                        </horizontal>
+                        <vertical>
+                        <samples>50</samples>
+                        <resolution>1</resolution>
+                        <min_angle>${-vertical_fov/360*3.14159}</min_angle>
+                        <max_angle>${vertical_fov/360*3.14159}</max_angle>
+                        </vertical>
+                      </scan>
+                      <range>
+                        <min>0.1</min>
+                        <max>80</max>
+                        <resolution>0.002</resolution>
+                      </range>
+                      <noise>
+		        <type>gaussian</type>
+		      	<mean>0.0</mean>
+		      	<stddev>0.01</stddev>
+		      </noise>
+                    </ray>
+                    <visualize>true</visualize>
+                    <samples>10000</samples>
+                    <downsample>1</downsample>
+                    <csv_file_name>$(find bcr_bot)/meshes/livox/scan_mode/mid360.csv</csv_file_name>
+		  <ros_topic>scan</ros_topic>
+                </plugin>
+            </sensor>
+        </gazebo>
+    </xacro:if>
+</robot>
