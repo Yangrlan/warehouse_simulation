@@ -65,7 +65,7 @@
         <gazebo reference="fisheye_camera">
             <sensor type="camera" name="fisheye_camera">
                 <always_on>true</always_on>
-                <update_rate>30.0</update_rate>
+                <update_rate>20.0</update_rate>
                 <visualize>1</visualize>
                 <camera>
                     <horizontal_fov>${radians(camera_horizontal_fov)}</horizontal_fov>
@@ -98,7 +98,7 @@
                 <plugin name="fisheye_camera_controller" filename="libgazebo_ros_camera.so">
                     <cameraName>fisheye_camera</cameraName>
                     <alwaysOn>true</alwaysOn>
-                    <updateRateHZ>30.0</updateRateHZ>
+                    <updateRateHZ>20.0</updateRateHZ>
                     <imageTopicName>image_raw</imageTopicName>
                     <cameraInfoTopicName>camera_info</cameraInfoTopicName>
                     <frameName>fisheye_camera_optical</frameName>
@@ -124,7 +124,7 @@
         <gazebo reference="fisheye_camera2">
             <sensor type="camera" name="fisheye_camera2">
                 <always_on>true</always_on>
-                <update_rate>30.0</update_rate>
+                <update_rate>20.0</update_rate>
                 <visualize>1</visualize>
                 <camera>
                     <horizontal_fov>${radians(camera_horizontal_fov)}</horizontal_fov>
@@ -157,7 +157,7 @@
                 <plugin name="fisheye_camera_controller2" filename="libgazebo_ros_camera.so">
                     <cameraName>fisheye_camera2</cameraName>
                     <alwaysOn>true</alwaysOn>
-                    <updateRateHZ>30.0</updateRateHZ>
+                    <updateRateHZ>20.0</updateRateHZ>
                     <imageTopicName>image_raw</imageTopicName>
                     <cameraInfoTopicName>camera_info</cameraInfoTopicName>
                     <frameName>fisheye_camera_optical2</frameName>
@@ -183,7 +183,7 @@
         <gazebo reference="fisheye_camera3">
             <sensor type="camera" name="fisheye_camera3">
                 <always_on>true</always_on>
-                <update_rate>30.0</update_rate>
+                <update_rate>20.0</update_rate>
                 <visualize>1</visualize>
                 <camera>
                     <horizontal_fov>${radians(camera_horizontal_fov)}</horizontal_fov>
@@ -216,7 +216,7 @@
                 <plugin name="fisheye_camera_controller3" filename="libgazebo_ros_camera.so">
                     <cameraName>fisheye_camera3</cameraName>
                     <alwaysOn>true</alwaysOn>
-                    <updateRateHZ>30.0</updateRateHZ>
+                    <updateRateHZ>20.0</updateRateHZ>
                     <imageTopicName>image_raw</imageTopicName>
                     <cameraInfoTopicName>camera_info</cameraInfoTopicName>
                     <frameName>fisheye_camera_optical3</frameName>
@@ -242,7 +242,7 @@
         <gazebo reference="fisheye_camera4">
             <sensor type="camera" name="fisheye_camera4">
                 <always_on>true</always_on>
-                <update_rate>30.0</update_rate>
+                <update_rate>20.0</update_rate>
                 <visualize>1</visualize>
                 <camera>
                     <horizontal_fov>${radians(camera_horizontal_fov)}</horizontal_fov>
@@ -275,7 +275,7 @@
                 <plugin name="fisheye_camera_controller4" filename="libgazebo_ros_camera.so">
                     <cameraName>fisheye_camera4</cameraName>
                     <alwaysOn>true</alwaysOn>
-                    <updateRateHZ>30.0</updateRateHZ>
+                    <updateRateHZ>20.0</updateRateHZ>
                     <imageTopicName>image_raw</imageTopicName>
                     <cameraInfoTopicName>camera_info</cameraInfoTopicName>
                     <frameName>fisheye_camera_optical4</frameName>
@@ -296,9 +296,9 @@
 
     </xacro:if>
     
-    <xacro:if value="$(arg camera_enabled)">
+    <xacro:if value="$(arg lidar_enabled)">
     
-        <gazebo reference="laser_livox">
+        <gazebo reference="livox">
             <sensor type="ray" name="laser_livox">
                 <pose>0 0 0 0 0 0</pose>
                 <visualize>true</visualize>
@@ -313,7 +313,7 @@
                         <max_angle>${horizontal_fov/360*3.14159}</max_angle>
                         </horizontal>
                         <vertical>
-                        <samples>50</samples>
+                        <samples>360</samples>
                         <resolution>1</resolution>
                         <min_angle>${-vertical_fov/360*3.14159}</min_angle>
                         <max_angle>${vertical_fov/360*3.14159}</max_angle>
@@ -331,10 +331,10 @@
 		      </noise>
                     </ray>
                     <visualize>true</visualize>
-                    <samples>10000</samples>
+                    <samples>24000</samples>
                     <downsample>1</downsample>
-                    <csv_file_name>$(find bcr_bot)/meshes/livox/scan_mode/mid360.csv</csv_file_name>
-		  <ros_topic>scan</ros_topic>
+                    <csv_file_name>package://livox_laser_simulation/scan_mode/mid360.csv</csv_file_name>
+		  <ros_topic>$(arg robot_namespace)/livox/lidar</ros_topic>
                 </plugin>
             </sensor>
         </gazebo>

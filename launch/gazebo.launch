@@ -8,7 +8,7 @@
 	<env name="GAZEBO_RESOURCE_PATH"  value="$(find bcr_bot)/worlds:$(optenv GAZEBO_RESOURCE_PATH)"/>
 	<arg name="world_name"            default="$(find bcr_bot)/worlds/small_warehouse.world"/>
 	<arg name="gazebo_gui_enabled"    default="true"/>
-	<arg name="two_d_lidar_enabled"   default="true"/>
+	<arg name="lidar_enabled"   	   default="true"/>
 	<arg name="camera_enabled"        default="true"/>
 	<arg name="stereo_camera_enabled" default="false"/>
 	<arg name="wheel_odom_topic"      default="odom"/>
@@ -30,13 +30,14 @@
 		<arg name="gui"           value="$(arg gazebo_gui_enabled)"/>
 		<arg name="headless"      value="true"/>
 		<arg name="debug"         value="false"/>
+		<arg name="verbose" 	  value="true"/>
 	</include>
 
 
 	<!-- .....................Call the launch file to spawn the robot ................... -->
 
 	<include file="$(find bcr_bot)/launch/bcr_bot_spawn.launch">
-		<arg name="two_d_lidar_enabled"        value="$(arg two_d_lidar_enabled)"/>
+		<arg name="lidar_enabled"        value="$(arg lidar_enabled)"/>
 		<arg name="camera_enabled"             value="$(arg camera_enabled)"/>
 		<arg name="stereo_camera_enabled"      value="$(arg stereo_camera_enabled)"/>
 		<arg name="wheel_odom_topic"           value="$(arg wheel_odom_topic)"/>
@@ -49,6 +50,5 @@
 		<arg name="orientation_yaw"            value="$(arg orientation_yaw)"/>
 		<arg name="odometry_source"            value="$(arg odometry_source)"/>
 	</include>
-
 
 </launch>

@@ -35,7 +35,7 @@
     <xacro:arg name="robot_namespace" default="/robot"/>
     <xacro:arg name="wheel_odom_topic" default="odom"/>
     <xacro:arg name="camera_enabled" default="false"/>
-    <xacro:arg name="two_d_lidar_enabled" default="false"/>
+    <xacro:arg name="lidar_enabled" default="false"/>
     <xacro:arg name="publish_wheel_odom_tf" default="true"/>
     <xacro:arg name="conveyor_enabled" default="false"/>
     <xacro:arg name="ground_truth_frame" default="map"/>
@@ -295,32 +295,37 @@
     </xacro:if>
     
     <!-- ............................. LiDAR........................................ -->
-    <xacro:if value="$(arg camera_enabled)">
-        <link name="laser_livox">
+    <xacro:if value="$(arg lidar_enabled)">
+        <link name="livox">
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <box size="0.1 0.1 0.1"/>
+                   <mesh filename="package://livox_laser_simulation/meshes/livox_mid40.dae">
+                   </mesh>
                 </geometry>
             </collision>
             
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <box size="0.1 0.1 0.1"/>
+                    <mesh filename="package://livox_laser_simulation/meshes/livox_mid40.dae">
+          	</mesh>
                 </geometry>
                 <material name="black"/>
             </visual>
             
         </link>
         
+        
         <joint name="laser_livox_joint" type="fixed">
+            <origin xyz="0 0 0.2" rpy="0 0 0"/>
             <parent link="base_link"/>
-            <child link="laser_livox"/>
-            <origin xyz="0 0 0.2" rpy="0 0 0" />
+            <child link="livox"/>
         </joint>
         
-        <gazebo reference="laser_livox"/>
+
+        
+        <gazebo reference="livox"/>
         
     </xacro:if>
     

@@ -12,12 +12,14 @@ In addition to ROS1 Noetic and Gazebo Classic installations, the dependencies ca
 # From the root directory of the workspace. This will install everything mentioned in package.xml
 rosdep install --from-paths src --ignore-src -r -y
 ```
-Then clone and install the livox-related packages:
+Then clone the livox-related packages into the workspace:
 ```bash
 git clone https://github.com/Livox-SDK/Livox-SDK.git
 git clone https://github.com/Livox-SDK/livox_laser_simulation.git
 git clone https://github.com/Livox-SDK/livox_ros_driver.git
 ```
+Replace the `livox_points_plugin.cpp` in the `livox_laser_simulation/src` folder with the one in the `warehouse_simulation/resources` folder, then build them follwing the instructions of each repositories.
+
 ### Source Build
 
 Download the codes into a ROS workspace, then
@@ -38,6 +40,14 @@ To view in rviz,
 ```bash
 roslaunch bcr_bot rviz.launch
 ```
+
+### Visualization
+1. Gazebo:
+	![](png/gazebo.png)
+
+2. Rviz:
+	![](png/rviz.jpg)
+	
 ### Configuration
 
 The launch file accepts multiple launch arguments,

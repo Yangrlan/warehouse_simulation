@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+	<name>bcr_bot</name>
+	<version>0.0.2</version>
+	<description>The warehouse simulation package modified by yrl</description>
+
+	<maintainer email="yangrlan@mail2.sysu.edu.cn">Yang Ruilan</maintainer>
+
+	<license>Apache License 2.0</license>
+
+	<buildtool_depend>catkin</buildtool_depend>
+
+	<exec_depend>joint_state_publisher</exec_depend>
+	<exec_depend>robot_state_publisher</exec_depend>
+	<exec_depend>rviz</exec_depend>
+	<exec_depend>xacro</exec_depend>
+	<exec_depend>gazebo_ros_pkgs</exec_depend>
+
+</package>
