@@ -18,7 +18,7 @@ git clone https://github.com/Livox-SDK/Livox-SDK.git
 git clone https://github.com/Livox-SDK/livox_laser_simulation.git
 git clone https://github.com/Livox-SDK/livox_ros_driver.git
 ```
-Replace the `livox_points_plugin.cpp` in the `livox_laser_simulation/src` folder with the one in the `warehouse_simulation/resources` folder, then build them follwing the instructions of each repositories.
+Replace the `livox_points_plugin.cpp` in the `livox_laser_simulation/src` folder with the one in the `warehouse_simulation/resources` folder, then build them following the instructions of each repositories.
 
 ### Source Build
 
@@ -32,7 +32,7 @@ To launch the robot in Gazebo,
 ```bash
 roslaunch bcr_bot gazebo.launch
 ```
-Make sure to `deactivate conda` before launch the robot!!!
+Make sure to `deactivate conda` before launching the robot!!!
 ```bash
 conda deactivate
 ```
@@ -46,7 +46,7 @@ roslaunch bcr_bot rviz.launch
 	![](png/gazebo.png)
 
 2. Rviz:
-	![](png/rviz.jpg)
+	![](png/rviz.png)
 	
 ### Configuration
 
